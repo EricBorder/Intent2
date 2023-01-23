@@ -13,6 +13,8 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     val REQUEST_IMAGE_CAPTURE = 1
+    val random = (0..9).random()
+    val random2 = (0..9).random()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +34,14 @@ class MainActivity : AppCompatActivity() {
         suma.setOnClickListener {
             val intento1 = Intent(this, SecondActivity::class.java)
             // Añade datos adicionales al Intent
-            intento1.putExtra("NUMERO", (0..9).random())
-            intento1.putExtra("NUMERO2",(0..9).random())
+            intento1.putExtra("NUMERO", random)
+            intento1.putExtra("NUMERO2", random2)
             // Inicia la segunda actividad
             startActivityForResult(intento1, REQUEST_SUMA)
 
         }
 
-
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val imageView = findViewById<ImageView>(R.id.foto)
@@ -58,10 +58,17 @@ class MainActivity : AppCompatActivity() {
             REQUEST_SUMA -> {
                 if (data != null) {
                     Log.d("asd", "recibido")
-                    textView.text = data.getIntExtra("Resultado",0).toString()
+                    var resultado1 = data.getIntExtra("suma", 0).toString()
+                    if (resultado1.toInt() == (random + random2)) {
+                        textView.text = "Bien " + data.getIntExtra("suma", 0).toString()
+                    } else {
+                        textView.text = "Mal " + data.getIntExtra("suma", 0).toString()
+                    }
+
                 }; }
         }
     }
+
     companion object {
         const val REQUEST_CAMARA = 1
         const val REQUEST_SUMA = 2
